@@ -159,6 +159,11 @@
           "name": "itemName",
           "type": "string",
           "value": ""
+        },
+        {
+          "name": "bag",
+          "type": "string",
+          "value": ""
         }
       ],
       "instances": [
@@ -243,7 +248,16 @@
               ]
             }
           ],
-          "actions": [],
+          "actions": [
+            {
+              "type": {
+                "value": "DeleteFichier"
+              },
+              "parameters": [
+                "\"bag\""
+              ]
+            }
+          ],
           "events": [
             {
               "type": "BuiltinCommonInstructions::Standard",
@@ -309,7 +323,13 @@
                     "\"Gold\"",
                     "yes"
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [],
+              "actions": [
                 {
                   "type": {
                     "value": "Inventory::SetMaximum"
@@ -318,6 +338,28 @@
                     "",
                     "\"bag\"",
                     "\"Silver\"",
+                    "10"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "Inventory::SetMaximum"
+                  },
+                  "parameters": [
+                    "",
+                    "\"bag\"",
+                    "\"Gold\"",
+                    "10"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "Inventory::SetMaximum"
+                  },
+                  "parameters": [
+                    "",
+                    "\"bag\"",
+                    "\"Bronze\"",
                     "10"
                   ]
                 },
@@ -342,11 +384,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "BuiltinCommonInstructions::Standard",
-              "conditions": [],
-              "actions": []
             }
           ]
         },
@@ -413,6 +450,16 @@
                 "=",
                 "\"\""
               ]
+            },
+            {
+              "type": {
+                "value": "DebuggerTools::ConsoleLog"
+              },
+              "parameters": [
+                "\"max count\" + ToString(Inventory::Maximum(\"bag\",\"Silver\"))",
+                "\"info\"",
+                ""
+              ]
             }
           ],
           "events": [
@@ -453,7 +500,7 @@
                     "NewText",
                     "Text",
                     "+",
-                    "itemName + \" Eqquiped:\" + item.equipped + NewLine()"
+                    "itemName + \" Equipped:\" + item.equipped + NewLine()"
                   ]
                 },
                 {
@@ -494,8 +541,112 @@
         },
         {
           "type": "BuiltinCommonInstructions::Standard",
-          "conditions": [],
-          "actions": []
+          "conditions": [
+            {
+              "type": {
+                "value": "KeyReleased"
+              },
+              "parameters": [
+                "",
+                "d"
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "type": {
+                "value": "Inventory::SerializeToVariable"
+              },
+              "parameters": [
+                "",
+                "\"bag\"",
+                "bag"
+              ]
+            }
+          ],
+          "events": [
+            {
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [],
+              "actions": [
+                {
+                  "type": {
+                    "value": "TextContainerCapability::TextContainerBehavior::SetValue"
+                  },
+                  "parameters": [
+                    "NewText",
+                    "Text",
+                    "=",
+                    "\"\""
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "BuiltinCommonInstructions::ForEachChildVariable",
+              "iterableVariableName": "bag",
+              "valueIteratorVariableName": "item",
+              "keyIteratorVariableName": "itemName",
+              "conditions": [],
+              "actions": [
+                {
+                  "type": {
+                    "value": "TextContainerCapability::TextContainerBehavior::SetValue"
+                  },
+                  "parameters": [
+                    "NewText",
+                    "Text",
+                    "+",
+                    "itemName + \" Count:\" + ToString(item.count) + NewLine()"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "TextContainerCapability::TextContainerBehavior::SetValue"
+                  },
+                  "parameters": [
+                    "NewText",
+                    "Text",
+                    "+",
+                    "itemName + \" maxCount:\" + ToString(item.maxCount) + NewLine()"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "TextContainerCapability::TextContainerBehavior::SetValue"
+                  },
+                  "parameters": [
+                    "NewText",
+                    "Text",
+                    "+",
+                    "itemName + \" Equipped:\" + item.equipped + NewLine()"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "TextContainerCapability::TextContainerBehavior::SetValue"
+                  },
+                  "parameters": [
+                    "NewText",
+                    "Text",
+                    "+",
+                    "itemName + \" unlimited:\" + item.unlimited + NewLine()"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "TextContainerCapability::TextContainerBehavior::SetValue"
+                  },
+                  "parameters": [
+                    "NewText",
+                    "Text",
+                    "+",
+                    "NewLine()"
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "BuiltinCommonInstructions::Standard",
