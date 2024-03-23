@@ -162,8 +162,13 @@
         },
         {
           "name": "bag",
-          "type": "string",
-          "value": ""
+          "type": "structure",
+          "children": []
+        },
+        {
+          "name": "bag2",
+          "type": "structure",
+          "children": []
         }
       ],
       "instances": [
@@ -542,23 +547,52 @@
               ]
             }
           ],
-          "actions": [
-            {
-              "type": {
-                "value": "Inventory::SerializeToVariable"
-              },
-              "parameters": [
-                "",
-                "\"bag\"",
-                "bag"
-              ]
-            }
-          ],
+          "actions": [],
           "events": [
             {
               "type": "BuiltinCommonInstructions::Standard",
               "conditions": [],
               "actions": [
+                {
+                  "type": {
+                    "value": "LireFichierTxt"
+                  },
+                  "parameters": [
+                    "\"game\"",
+                    "\"bag\"",
+                    "",
+                    "tempInventory"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "JSONToVariableStructure"
+                  },
+                  "parameters": [
+                    "tempInventory",
+                    "inventory"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "Inventory::UnserializeFromVariable"
+                  },
+                  "parameters": [
+                    "",
+                    "\"bag\"",
+                    "inventory"
+                  ]
+                },
+                {
+                  "type": {
+                    "value": "Inventory::SerializeToVariable"
+                  },
+                  "parameters": [
+                    "",
+                    "\"bag\"",
+                    "bag"
+                  ]
+                },
                 {
                   "type": {
                     "value": "TextContainerCapability::TextContainerBehavior::SetValue"
@@ -637,11 +671,6 @@
               ]
             }
           ]
-        },
-        {
-          "type": "BuiltinCommonInstructions::Standard",
-          "conditions": [],
-          "actions": []
         },
         {
           "type": "BuiltinCommonInstructions::Standard",
